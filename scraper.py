@@ -1,6 +1,7 @@
 import re
 from time import sleep
 
+import urllib3
 import requests
 from lxml import html
 
@@ -67,7 +68,7 @@ class encontre_noticias():
     def load_feed(self) -> html.HtmlElement:
         response = requests.request("GET", BASE_URL, params=self.base_query, headers=HEADER)
         return utils.html_parser(response)
-    
+
     def load_page(self, url: str) -> html.HtmlElement:
         response = requests.request("GET", url, headers=HEADER)
         return utils.html_parser(response)

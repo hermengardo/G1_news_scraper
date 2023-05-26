@@ -41,16 +41,23 @@ def normalize_text(news: list) -> str:
     return normalized
 
 
-def clean_file(file:str) -> None:
+def clean_file(file: str) -> None:
     if path.exists(file):
         remove(file)
 
 
-def save_data_to_csv(data:dict, filepath:str) -> None:
+def save_data_to_csv(data: dict, filepath: str) -> None:
     csv_file_exists = path.isfile('data.csv')
 
     with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['data', 'titulo', 'subtitulo', 'autor', 'conteudo', 'regiao', 'link', 'busca']
+        fieldnames = ['data',
+                      'titulo',
+                      'subtitulo',
+                      'autor',
+                      'conteudo',
+                      'regiao',
+                      'link',
+                      'busca']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if not csv_file_exists:
             writer.writeheader()
