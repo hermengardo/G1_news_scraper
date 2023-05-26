@@ -1,7 +1,7 @@
-# **G1 News Scraper**
+# **G1 Scraper** 📰
 
-## **INTRODUÇÃO**
-- Scraper para extrair dados do site G1 (https://g1.globo.com/busca/).
+## **Introdução**
+- Raspador de dados para o site G1 (https://g1.globo.com/busca/).
 
 ## **Recursos**
 - Extrai notícias do site G1 com base em critérios de pesquisa.
@@ -50,3 +50,15 @@ if __name__ == "__main__":
 | filepath | Não | O caminho do arquivo CSV onde os dados coletados serão salvos. O valor padrão é "data.csv" e o arquivo será criado no diretório atual. |
 | retry | Não | O número máximo de tentativas de solicitação em caso de perda de conexão. O valor padrão é 3. |
 | timeout | Não | O tempo máximo em segundos para aguardar uma resposta do servidor. O valor padrão é 30 segundos. |
+
+## **Campos disponíveis**
+| Campo | Descrição |
+|-------|-----------|
+| data | A data de publicação do artigo. |
+| titulo | O título do artigo. |
+| subtitulo | O subtítulo do artigo. |
+| autor | O autor do artigo. |
+| conteudo | O conteúdo do artigo. |
+| regiao | A região associada ao artigo. |
+| link | O link para o artigo. |
+| busca | A consulta associada ao artigo. |
