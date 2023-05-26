@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 3. Edite e execute o arquivo `main.py`.
 
-## Exemplo de uso
+## **Exemplo de uso**
 ```python
 from scraper import encontre_noticias
 
