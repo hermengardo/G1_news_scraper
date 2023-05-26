@@ -9,16 +9,6 @@
 - Extrai vários campos de dados dos artigos, incluindo título, subtítulo, autor, data de publicação, conteúdo, região e link.
 - Salva os dados coletados em um arquivo CSV.
 
-## Dependências
-
-O script requer as seguintes dependências:
-
-- Python 3.x
-- Biblioteca `requests`
-- Biblioteca `lxml`
-
-
-
 ## **Instalação**
 1. Clone o repositório:
 ```sh
