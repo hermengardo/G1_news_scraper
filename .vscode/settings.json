@@ -1,7 +1,0 @@
-{
-    "editor.fontFamily": "Hack NF",
-    "editor.fontSize": 20,
-    "python.analysis.extraPaths": [
-        "./src/utils"
-    ]
-}
