@@ -53,7 +53,6 @@ class encontre_noticias():
                 for article in articles:
                     self.scrape_content(article)
                     sleep(self.delay)
-                print(f"Fim da página {self.base_query['page']}")
                 self.base_query['page'] += 1
                 self.retry_count = 0  # Reset the retry count if the request is successful
             except requests.exceptions.RequestException:
@@ -95,7 +94,7 @@ class encontre_noticias():
             data['link'] = article
             data['busca'] = self.busca
             self.count += 1
-            print(f'Coletado: {self.count} | Autor: {data["autor"]}')
+            print(f'Coletado: {self.count} | {data["autor"]}')
             # Salva os dados
             utils.save_data_to_csv(data=data, filepath=self.filepath)
         else:
