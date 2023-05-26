@@ -40,7 +40,6 @@ if __name__ == "__main__":
 ```
 
 ## **Parâmetros**
-- A classe `encontre_noticias` aceita os seguintes parâmetros:
 | Parâmetro | Obrigatório | Descrição |
 |-----------|-------------|-----------|
 | busca | Sim | A consulta de pesquisa para encontrar notícias. Por exemplo, "tecnologia", "política", "esportes", etc. |
