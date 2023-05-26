@@ -23,8 +23,6 @@ pip install -r requirements.txt
 3. Edite e execute o arquivo `main.py`.
 
 ## Exemplo de uso
-- Neste exemplo, o script irá procurar por notícias relacionadas à tecnologia no período de 1º a 31 de maio de 2023. Será adicionado um atraso de 0.5 segundos entre cada solicitação, e os dados coletados serão salvos no arquivo "dados.csv". Se ocorrerem erros de conexão, o script fará até 5 tentativas de solicitação e aguardará no máximo 60 segundos para uma resposta do servidor.
-
 ```python
 from scraper import encontre_noticias
 
