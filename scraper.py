@@ -1,46 +1,68 @@
+import re
 from time import sleep
 
 import requests
+from lxml import html
+
 import utils
 
-import re
-from lxml import html
 
 global BASE_URL, HEADER
 BASE_URL = "https://g1.globo.com/busca/"
 HEADER = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
-           "Accept": "*/*",
-           "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,es;q=0.6",
-           "Accept-Encoding": "gzip, deflate, br"}
+          "Accept": "*/*",
+          "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,es;q=0.6",
+          "Accept-Encoding": "gzip, deflate, br"}
+
 
 class encontre_noticias():
-    def __init__(self, busca, inicio, fim, delay=0.1, filepath="data.csv"):
+    def __init__(self,
+                 busca,
+                 inicio,
+                 fim,
+                 delay=0.1,
+                 filepath="data.csv",
+                 retry=3,
+                 timeout=30):
         since = utils.convert_to_datetime(inicio)
         until = utils.convert_to_datetime(fim)
         self.busca = busca
-        self.base_query = {"q":busca,
-                           "page":1,
-                           "order":"recent",
-                           "from":since,
-                           "to":until,
-                           "ajax":"1"}
-        self.filepath = filepath           
+        self.base_query = {"q": busca,
+                           "page": 1,
+                           "order": "recent",
+                           "from": since,
+                           "to": until,
+                           "ajax": "1"}
+        self.filepath = filepath
         self.delay = delay
         self.count = 0
+        self.retry = retry
+        self.retry_count = 0
+        self.timeout = timeout
         utils.clean_file(self.filepath)
         self.pipeline()
-    
+
     def pipeline(self) -> None:
         while True:
-            tree = self.load_feed()
-            if self.check_end_page(tree):
-                break
-            articles = self.find_urls(tree)
-            for article in articles:
-                self.scrape_content(article)
+            try:
+                tree = self.load_feed()
+                if self.check_end_page(tree):
+                    break
+                articles = self.find_urls(tree)
+                for article in articles:
+                    self.scrape_content(article)
+                    sleep(self.delay)
+                print(f"Fim da página {self.base_query['page']}")
+                self.base_query['page'] += 1
+                self.retry_count = 0  # Reset the retry count if the request is successful
+            except requests.exceptions.RequestException:
+                self.retry_count += 1
+                if self.retry_count > self.retry:
+                    print("Maximum retries exceeded. Exiting...")
+                    break
+                print("Lost connection. Retrying after delay...")
                 sleep(self.delay)
-            print(f"Fim da página {self.base_query['page']}")
-            self.base_query['page'] += 1
+                continue
 
     def load_feed(self) -> html.HtmlElement:
         response = requests.request("GET", BASE_URL, params=self.base_query, headers=HEADER)
@@ -53,7 +75,7 @@ class encontre_noticias():
     def find_urls(self, tree: html.HtmlElement) -> list:
         urls = [utils.decode_url(a.get('href')) for a in tree.cssselect('a.widget--info__media')]
         return self.url_is_valid(urls)
-    
+
     def scrape_content(self, article) -> None:
         data = {}
         # Carrega a página
@@ -89,13 +111,13 @@ class encontre_noticias():
         if len(element) > 0:
             return True
         return False
-    
+
     def article_is_valid(self, article: html.HtmlElement) -> bool:
         element = article.cssselect('div[id="page-video-wrapper"]')
         if len(element) > 0:
             return False
         return True
-        
+
     def url_is_valid(self, urls: list) -> list:
         pattern = r"g1\.globo\.com\/[a-zA-Z]{2}\/"
         return [url for url in urls if re.search(pattern, url)]
