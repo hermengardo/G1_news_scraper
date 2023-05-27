@@ -1,4 +1,5 @@
 # **G1 Scraper** 📰
+[![CodeFactor](https://www.codefactor.io/repository/github/hermengardo/g1_news_scraper/badge)](https://www.codefactor.io/repository/github/hermengardo/g1_news_scraper)
 
 ## **Introdução**
 - Raspador de dados para o site [G1](https://g1.globo.com/busca/).
