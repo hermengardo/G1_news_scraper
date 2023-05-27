@@ -1,7 +1,7 @@
 # **G1 Scraper** 📰
 
 ## **Introdução**
-- Raspador de dados para o site G1 (https://g1.globo.com/busca/).
+- Raspador de dados para o site [G1](https://g1.globo.com/busca/).
 
 ## **Recursos**
 - Extrai notícias do site G1 com base em critérios de pesquisa.
