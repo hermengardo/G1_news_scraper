@@ -41,8 +41,8 @@ if __name__ == "__main__":
 | Parâmetro | Obrigatório | Descrição |
 |-----------|-------------|-----------|
 | busca | Sim | A consulta de pesquisa para encontrar notícias. Por exemplo, "tecnologia", "política", "esportes", etc. |
-| inicio | Sim | A data de início do intervalo de pesquisa. Deve estar no formato "dd/mm/aaaa". |
-| fim | Sim | A data de término do intervalo de pesquisa. Deve estar no formato "dd/mm/aaaa". |
+| inicio | Sim | A data de início do intervalo de pesquisa. Deve estar no formato "dd-mm-aaaa". |
+| fim | Sim | A data de término do intervalo de pesquisa. Deve estar no formato "dd-mm-aaaa". |
 | delay | Não | O atraso em segundos entre cada solicitação de página. É útil para evitar sobrecarregar o servidor. O valor padrão é 0.1 segundos. |
 | filepath | Não | O caminho do arquivo CSV onde os dados coletados serão salvos. O valor padrão é "data.csv" e o arquivo será criado no diretório atual. |
 | retry | Não | O número máximo de tentativas de solicitação em caso de perda de conexão. O valor padrão é 3. |
