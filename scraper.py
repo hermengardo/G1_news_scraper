@@ -33,6 +33,7 @@ class encontre_noticias():
                            "order": "recent",
                            "from": since,
                            "to": until,
+                           "species":"notícias",
                            "ajax": "1"}
         self.filepath = filepath
         self.delay = delay
@@ -48,6 +49,7 @@ class encontre_noticias():
             try:
                 tree = self.load_feed()
                 if self.check_end_page(tree):
+                    print('Fim da coleta.')
                     break
                 articles = self.find_urls(tree)
                 for article in articles:
@@ -58,10 +60,10 @@ class encontre_noticias():
             except requests.exceptions.RequestException:
                 self.retry_count += 1
                 if self.retry_count > self.retry:
-                    print("Maximum retries exceeded. Exiting...")
+                    print("Número máximo de tentativas excedido. Fechando conexão...")
                     break
-                print("Lost connection. Retrying after delay...")
-                sleep(self.delay)
+                print(f"Perda de conexão... Nova tentativa em {self.timeout} segundos")
+                sleep(self.timeout)
                 continue
 
     def load_feed(self) -> html.HtmlElement:
@@ -85,24 +87,33 @@ class encontre_noticias():
             data['subtitulo'] = self.get_data(article_tree, 'h2[class=content-head__subtitle]')
             data['autor'] = self.get_data(article_tree, 'p[class=content-publication-data__from]')
             # Extrai dados (campos fixos)
-            data['data'] = article_tree.cssselect('time[itemprop=datePublished]')[0].get('datetime')
-            data['titulo'] = article_tree.cssselect('div[class=title] > meta[itemprop=name]')[0].get('content')
-            text = [txt.xpath('.//text()') for txt in article_tree.cssselect('div.mc-column.content-text.active-extra-styles')]
-            text = utils.normalize_text(text)
-            data['conteudo'] = text
+            data['data'] = self.get_data(article_tree, 'time[itemprop=datePublished]', 'datetime')
+            data['titulo'] = self.get_data(article_tree, 'div[class=title] > meta[itemprop=name]', 'content')
+            data['conteudo'] = self.get_media_content(article_tree, 'div.mc-column.content-text.active-extra-styles')
             data['regiao'] = utils.extract_UF_from_url(article)
             data['link'] = article
             data['busca'] = self.busca
             self.count += 1
-            print(f'Coletado: {self.count} | {data["autor"]}')
+            print(f'Coletado: {self.count} | {data["titulo"][:30]}... | {data["autor"]}')
             # Salva os dados
             utils.save_data_to_csv(data=data, filepath=self.filepath)
         else:
             return None
 
-    def get_data(self, article_tree, css_selector):
+    def get_data(self, article_tree: html.HtmlElement, css_selector: str, attribute=None) -> str:
         try:
-            return article_tree.cssselect(css_selector)[0].text
+            if attribute:
+                return article_tree.cssselect(css_selector)[0].get(attribute)
+            else:
+                return article_tree.cssselect(css_selector)[0].text
+        except IndexError:
+            return 'nan'
+
+    def get_media_content(self, article_tree: html.HtmlElement, css_selector: str) -> str:
+        try:
+            text = [txt.xpath('.//text()') for txt in article_tree.cssselect(css_selector)]
+            text = utils.normalize_text(text)
+            return text
         except IndexError:
             return 'nan'
 
