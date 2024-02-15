@@ -5,7 +5,6 @@
 - Raspador de dados para o site [G1](https://g1.globo.com/busca/).
 
 ## **Recursos**
-- Extrai notícias do site G1 com base em critérios de pesquisa.
 - Permite filtrar os artigos dentro de um intervalo de datas específico.
 - Extrai vários campos de dados dos artigos, incluindo título, subtítulo, autor, data de publicação, conteúdo, região e link.
 - Salva os dados coletados em um arquivo CSV.
