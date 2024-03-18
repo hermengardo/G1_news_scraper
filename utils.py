@@ -47,7 +47,7 @@ def clean_file(file: str) -> None:
 
 
 def save_data_to_csv(data: dict, filepath: str) -> None:
-    csv_file_exists = path.isfile('data.csv')
+    csv_file_exists = path.isfile(filepath)
 
     with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['data',
