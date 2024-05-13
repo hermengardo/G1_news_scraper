@@ -101,12 +101,39 @@ class encontre_noticias():
     def scrape_content(self, article) -> None:
         data = {}
         article_tree = self.fetch(article)
+        old_layout = self.is_old_layout(article_tree)
+        if old_layout:
+            selectors = {
+                'subtitulo': 'div[class="materia-titulo"] > h2',
+                'autor': 'p[class="vcard author"] > span',
+                'data': 'div[class="materia-cabecalho"] > * > abbr[class="published"]',
+                'titulo': 'h1[class="entry-title"]',
+                'conteudo': 'div[id="materia-letra"] > * > p',
+                'tags': 'div[class="lista-de-entidades"] > div[class="conteudo"] > ul'
+            }
+        else:
+            selectors = {
+                'subtitulo': 'h2[class=content-head__subtitle]',
+                'autor': 'p[class=content-publication-data__from]',
+                'data': 'time[itemprop=datePublished]',
+                'titulo': 'div[class=title] > meta[itemprop=name]',
+                'conteudo': 'div[class="mc-column content-text active-extra-styles "] > p[class= " content-text__container "]',
+                'tags': 'ul[data-track-action="tag semantica"]'
+            }
         if self.article_is_valid(article_tree):
-            data['subtitulo'] = self.get_data(article_tree, 'h2[class=content-head__subtitle]')
-            data['autor'] = self.get_data(article_tree, 'p[class=content-publication-data__from]')
-            data['data'] = self.get_data(article_tree, 'time[itemprop=datePublished]', 'datetime')
-            data['titulo'] = self.get_data(article_tree, 'div[class=title] > meta[itemprop=name]', 'content')
-            data['conteudo'] = self.get_media_content(article_tree, 'div.mc-column.content-text.active-extra-styles')
+            if old_layout:
+                data['titulo'] = self.get_data(article_tree, selectors['titulo'])
+                data['subtitulo'] = self.get_media_content(article_tree, selectors['subtitulo'])
+                data['data'] = self.get_data(article_tree, selectors['data'])
+                data['autor'] = self.get_media_content(article_tree, selectors['autor'])
+            else:
+                data['titulo'] = self.get_data(article_tree, selectors['titulo'], 'content')
+                data['subtitulo'] = self.get_data(article_tree, selectors['subtitulo'])
+                data['data'] = self.get_data(article_tree, selectors['data'], 'datetime')
+                data['autor'] = self.get_data(article_tree, selectors['autor'])
+
+            data['conteudo'] = self.get_media_content(article_tree, selectors['conteudo'])
+            data['tópicos'] = self.get_media_content(article_tree, selectors['tags'])
             data['regiao'] = utils.extract_UF_from_url(article)
             data['link'] = article
             data['busca'] = self.busca
@@ -115,6 +142,12 @@ class encontre_noticias():
             utils.save_data_to_csv(data=data, filepath=self.filepath)
         else:
             return None
+    
+    def is_old_layout(self, tree: html.HtmlElement) -> bool:
+        element = tree.cssselect('div[class=materia-titulo]')
+        if len(element) > 0:
+            return True
+        return False
 
     def get_data(self, article_tree: html.HtmlElement, css_selector: str, attribute=None) -> str:
         try:

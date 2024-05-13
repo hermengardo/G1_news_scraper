@@ -37,7 +37,7 @@ def extract_UF_from_url(url: str) -> str:
 
 
 def normalize_text(news: list) -> str:
-    normalized = ' '.join([item for sublist in news for item in sublist])
+    normalized = ' '.join([item for sublist in news for item in sublist]).strip()
     return normalized
 
 
@@ -50,11 +50,12 @@ def save_data_to_csv(data: dict, filepath: str) -> None:
     csv_file_exists = path.isfile(filepath)
 
     with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['data',
-                      'titulo',
+        fieldnames = ['titulo',
                       'subtitulo',
-                      'autor',
+                      'data',
                       'conteudo',
+                      'tópicos',
+                      'autor',
                       'regiao',
                       'link',
                       'busca']
