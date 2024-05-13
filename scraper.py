@@ -63,12 +63,12 @@ class encontre_noticias():
                 articles = self.find_urls(tree)
                 for article in articles:
                     if self.max_results != None and self.count >= self.max_results:
-                        print('Número máximo de resultados atingido.')
                         self.max_reached = True
                         break
                     self.scrape_content(article)
                     sleep(self.delay)
                 if self.max_reached:
+                    print('Número máximo de resultados atingido.')
                     print('Fim da coleta.')
                     break
                 self.params['page'] += 1
