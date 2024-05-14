@@ -124,17 +124,16 @@ class encontre_noticias():
             if old_layout:
                 data['titulo'] = self.get_data(article_tree, selectors['titulo'])
                 data['subtitulo'] = self.get_media_content(article_tree, selectors['subtitulo'])
-                data['data'] = self.get_data(article_tree, selectors['data'])
                 data['autor'] = self.get_media_content(article_tree, selectors['autor'])
             else:
                 data['titulo'] = self.get_data(article_tree, selectors['titulo'], 'content')
                 data['subtitulo'] = self.get_data(article_tree, selectors['subtitulo'])
-                data['data'] = self.get_data(article_tree, selectors['data'], 'datetime')
                 data['autor'] = self.get_data(article_tree, selectors['autor'])
 
             data['conteudo'] = self.get_media_content(article_tree, selectors['conteudo'])
             data['tópicos'] = self.get_media_content(article_tree, selectors['tags'])
             data['regiao'] = utils.extract_UF_from_url(article)
+            data['data'] = self.get_data(article_tree, selectors['data'])
             data['link'] = article
             data['busca'] = self.busca
             self.count += 1

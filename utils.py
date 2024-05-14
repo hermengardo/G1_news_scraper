@@ -52,11 +52,11 @@ def save_data_to_csv(data: dict, filepath: str) -> None:
     with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['titulo',
                       'subtitulo',
-                      'data',
                       'conteudo',
                       'tópicos',
                       'autor',
                       'regiao',
+                      'data',
                       'link',
                       'busca']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
