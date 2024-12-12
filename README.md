@@ -40,7 +40,7 @@ if __name__ == "__main__":
 ## **Parâmetros**
 | Parâmetro   | Obrigatório | Descrição                                                                                         |
 |-------------|-------------|---------------------------------------------------------------------------------------------------|
-| busca       | Sim         | A consulta de pesquisa para encontrar notícias. Por exemplo, "tecnologia", "política", "esportes", etc. |
+| busca       | Sim         | Campo de busca. |
 | inicio      | Sim         | A data de início do intervalo de pesquisa. Deve estar no formato "dd-mm-aaaa".                    |
 | fim         | Sim         | A data de término do intervalo de pesquisa. Deve estar no formato "dd-mm-aaaa".                  |
 | delay       | Não         | O atraso em segundos entre cada solicitação de página. O valor padrão é 0.1 segundos. |
