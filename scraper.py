@@ -29,7 +29,7 @@ class encontre_noticias():
         self.busca = busca
         since = utils.convert_to_datetime(inicio)
         until = utils.convert_to_datetime(fim)
-        
+
         self.params = {
             "q": busca,
             "page": 1,
@@ -50,7 +50,7 @@ class encontre_noticias():
         self.max_results = max_results
         self.max_reached = False
         self.count = 0
-        
+
         self.run()
 
     def run(self) -> None:
@@ -86,9 +86,9 @@ class encontre_noticias():
         response = (
             requests
             .request(
-                "GET", 
-                url, 
-                params=self.params, 
+                "GET",
+                url,
+                params=self.params,
                 headers=HEADERS
             )
         )
@@ -117,7 +117,7 @@ class encontre_noticias():
                 'autor': 'p[class=content-publication-data__from]',
                 'data': 'time[itemprop=datePublished]',
                 'titulo': 'div[class=title] > meta[itemprop=name]',
-                'conteudo': 'div[class="mc-column content-text active-extra-styles "] > p[class= " content-text__container "]',
+                'conteudo': 'div[class="mc-column content-text active-extra-styles "] > p',
                 'tags': 'ul[data-track-action="tag semantica"]'
             }
         if self.article_is_valid(article_tree):
@@ -141,7 +141,7 @@ class encontre_noticias():
             utils.save_data_to_csv(data=data, filepath=self.filepath)
         else:
             return None
-    
+
     def is_old_layout(self, tree: html.HtmlElement) -> bool:
         element = tree.cssselect('div[class=materia-titulo]')
         if len(element) > 0:
